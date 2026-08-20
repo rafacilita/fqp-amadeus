@@ -1,5 +1,5 @@
 const MONTHS=['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
-export const RELATION_SEPARATOR={connection:'',stopover:'-',surface:'-/'};
+export const RELATION_SEPARATOR={connection:'',stopover:'-',surface:'---'};
 
 export function normalizeCode(value){return String(value??'').trim().toUpperCase()}
 
