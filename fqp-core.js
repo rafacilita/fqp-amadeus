@@ -1,5 +1,5 @@
 const MONTHS=['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
-export const RELATION_SEPARATOR={connection:'',stopover:'-',surface:'--','stopover-surface':'---'};
+export const RELATION_SEPARATOR={connection:'',stopover:'-',surface:'-/'};
 
 export function normalizeCode(value){return String(value??'').trim().toUpperCase()}
 
@@ -48,8 +48,9 @@ export function buildFqpDetails(itinerary,originalIssueDate){
   command+=value;parts.push({label:`Trecho ${index+1}`,value});previousDate=date;
   if(index<segments.length-1){
    const separator=RELATION_SEPARATOR[segment.relation];
-   if(separator){const labels={stopover:'Stopover',surface:'Surface','stopover-surface':'Stopover + Surface'};command+=separator;parts.push({label:labels[segment.relation],value:separator})}
-   if(['surface','stopover-surface'].includes(segment.relation)){command+=segments[index+1].origin;parts.push({label:'Nova origem',value:segments[index+1].origin})}
+   if(segment.relation==='surface'){
+    const value=`${separator}${segments[index+1].origin}`;command+=value;parts.push({label:'Surface',value});
+   }else if(separator){command+=separator;parts.push({label:'Stopover',value:separator})}
   }
  });
  const retroactive=`/R,${formatAmadeusDate(originalIssueDate,true)}`;command+=retroactive;parts.push({label:'Data retroativa',value:retroactive});
@@ -57,4 +58,3 @@ export function buildFqpDetails(itinerary,originalIssueDate){
 }
 
 export function buildFqpCommand(itinerary,originalIssueDate){return buildFqpDetails(itinerary,originalIssueDate).command}
-
